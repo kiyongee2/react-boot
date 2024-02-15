@@ -1,0 +1,14 @@
+package com.khit.book.service;
+
+import org.springframework.stereotype.Service;
+
+import com.khit.book.repository.BookRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class BookService {
+
+	private final BookRepository bookRepository;
+}

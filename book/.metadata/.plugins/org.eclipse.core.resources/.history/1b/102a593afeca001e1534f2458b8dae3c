@@ -1,0 +1,5 @@
+package com.khit.book.controller;
+
+public class HomeController {
+
+}

@@ -1,0 +1,5 @@
+package com.khit.book.repository;
+
+public interface BookRepository {
+
+}

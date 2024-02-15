@@ -1,0 +1,14 @@
+package com.khit.book.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import com.khit.book.service.BookService;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@RestController
+public class BookController {
+
+	private final BookService bookService;
+}
