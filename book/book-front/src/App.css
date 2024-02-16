@@ -1,0 +1,31 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+button{margin: 3px;}
+.header{
+  background-color: rgb(241, 126, 126);
+  height: 80px;
+  line-height: 80px;
+}
+.header a{
+  margin: 0 20px;
+  text-decoration: none;
+  color: #444;
+}
+.home{
+  width: 1200px;
+  margin: 20px auto;
+  height: 400px;
+  line-height: 2;
+}
+.booklist{
+  width: 1200px;
+  margin: 20px auto;
+  height: 400px;
+}
+.footer{
+  background-color: rgb(234, 233, 233);
+  height: 80px;
+  line-height: 80px;
+}
