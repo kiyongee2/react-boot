@@ -1,0 +1,64 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.App{
+  text-align: center;
+}
+.header {
+  background-color: #4CAF50;
+  color: white;
+  /* text-align: center; */
+  padding: 1em;
+}
+.home{
+  color: #333;
+  text-align: center;
+  padding: 2em;  
+}
+.book-list{
+  color: #333;
+  text-align: center;
+  padding: 2em;  
+}
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1em;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+h2{margin: 16px;}
+a{
+  text-decoration: none;
+  color: blue;
+  font-size: 20px;
+  margin: 0 15px;
+}
+ul li{list-style: none;}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+button {
+  background-color: #007bff;   /* 파란색 배경 */
+  color: white;                /* 글자색 */
+  border: none;                /* 테두리 제거 */
+  padding: 6px 12px;          /* 여백 */
+  border-radius: 5px;          /* 둥근 모서리 */
+  margin: 5px
+}
+
+.table-list{
+  width: 100%;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+.table-list th, td{
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
