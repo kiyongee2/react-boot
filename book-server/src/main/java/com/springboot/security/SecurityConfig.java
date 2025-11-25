@@ -42,8 +42,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/books/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/books/**").authenticated()
 
-                // 리뷰는 로그인 필요
-                .requestMatchers("/api/reviews/**").authenticated()
+                //리뷰 조회는 누구나 허용
+                .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
+                // 리뷰 등록은 로그인 필요
+                .requestMatchers(HttpMethod.POST, "/api/reviews/**").authenticated()
 
                 // 기타 요청은 허용
                 .anyRequest().permitAll()

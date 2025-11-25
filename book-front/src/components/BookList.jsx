@@ -87,11 +87,6 @@ const BookList = () => {
         <button onClick={() => setPage(0)}>검색</button>
       </div>
 
-      {/* 도서 등록 */}
-      <Link to="/add" style={{ textDecoration: "none" }}>
-        <button style={{ marginBottom: "20px" }}>+ 도서 등록</button>
-      </Link>
-
       {/* 목록 출력 */}
       {books.length === 0 ? (
         <p>등록된 도서가 없습니다.</p>

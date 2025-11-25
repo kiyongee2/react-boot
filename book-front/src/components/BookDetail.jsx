@@ -3,141 +3,146 @@ import React, { useState, useEffect } from "react";
 import api from "../api/api";
 import dayjs from "dayjs";
 
-const BookDeatail = () => {
-  const { id } = useParams(); // URL 파라미터에서 도서 ID 추출
-  const [book, setBook] = useState({}); // 도서 정보 상태
+const BookDetail = () => {
+  const { id } = useParams();
+  const [book, setBook] = useState({});
   const [reviews, setReviews] = useState([]);
-  const [writer, setWriter] = useState("");
   const [user, setUser] = useState(null);
   const [content, setContent] = useState("");
 
-  const navigate = useNavigate(); // 페이지 이동 훅
+  const navigate = useNavigate();
   const location = useLocation();
   const { page = 0, keyword = "", type = "all" } = location.state || {};
 
-  const token = localStorage.getItem("token");  // 토큰 변수를 의존성으로 사용
-
-  //로그인한 사용자 정보
+  // 🔹 로그인 사용자 정보 가져오기
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return; // 토큰 없으면 로그인 안 된 상태
+    if (!token) return;
 
     api
       .get("/auth/me")
-      .then((res) => {
-        setUser(res.data); // { username, fullname, role }
-      })
-      .catch(() => {
-        setUser(null);
-      });
-  }, [token]);
+      .then((res) => setUser(res.data))
+      .catch(() => setUser(null)); // 인증 실패 → 비로그인 처리
+  }, []);
 
-  // 도서 상세 정보 불러오기
+  // 🔹 도서 상세 정보
   useEffect(() => {
     const fetchBookDetail = async () => {
       try {
-        const res = await api.get(`/books/${id}`); // 도서 상세 정보 API 호출
-        setBook(res.data); // 상태 업데이트
+        const res = await api.get(`/books/${id}`);
+        setBook(res.data);
       } catch (error) {
-        console.error("도서 상세 정보 불러오기 실패:", error);
+        console.error("도서 상세 정보 오류:", error);
       }
     };
-    fetchBookDetail(); // 함수 호출
-  }, [id]); // id가 변경될 때마다 실행
+    fetchBookDetail();
+  }, [id]);
 
-  // 리뷰 목록 조회
+  // 🔹 리뷰 목록
   const loadReviews = async () => {
     const res = await api.get(`/reviews/${id}`);
     setReviews(res.data);
-  }
+  };
 
   useEffect(() => {
     loadReviews();
   }, [id]);
 
-  // 리뷰 등록
+  // 🔹 리뷰 등록
   const handleReviewSubmit = async () => {
-    if(!user.trim() || !content.trim()){
-      alert("작성자와 내용을 입력하세요.");
+    if (!content.trim()) {
+      alert("내용을 입력하세요.");
       return;
     }
 
-    try{
-      await api.post("/reviews", {content, bookId: id});
+    try {
+      await api.post("/reviews", { content, bookId: id });
       setContent("");
       loadReviews();
-    }catch(err){
+    } catch (err) {
       console.log("리뷰 등록 실패:", err);
     }
-  }
+  };
 
   return (
     <div style={{ width: "60%", margin: "50px auto" }}>
       <h1>📖 도서 상세보기</h1>
+
       <div style={{ textAlign: "left", lineHeight: "1.8" }}>
         <p><strong>ID:</strong> {book.id}</p>
         <p><strong>제목:</strong> {book.title}</p>
         <p><strong>저자:</strong> {book.author}</p>
         {book.regDate && (
           <p>
-            <strong>등록일: </strong>
-            {dayjs(book.regDate).format("YYYY-MM-DD HH:mm")}
+            <strong>등록일:</strong> {dayjs(book.regDate).format("YYYY-MM-DD HH:mm")}
           </p>
         )}
       </div>
+
       <hr />
 
-      {/* 리뷰 작성 */}
+      {/* 🔹 리뷰 작성 (로그인 한 경우만 표시) */}
       <h2>리뷰 작성</h2>
-      <input 
-        type="text" 
-        placeholder="작성자"
-        value={user.fullname}
-        onChange={(e) => setUser(e.target.value)}
-        style={{width: "30%", marginRight: "10px", padding: "7px"}}
-      />
-      <input 
-        type="text" 
-        placeholder="내용"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        style={{width: "60%", padding: "7px"}}
-      />
-      <button onClick={handleReviewSubmit} style={{marginLeft: "10px"}}>
-        등록
-      </button>
+
+      {user ? (
+        <div>
+          <input
+            type="text"
+            value={user.fullname}
+            readOnly
+            style={{ width: "30%", marginRight: "10px", padding: "7px" }}
+          />
+
+          <input
+            type="text"
+            placeholder="내용"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            style={{ width: "60%", padding: "7px" }}
+          />
+
+          <button
+            onClick={handleReviewSubmit}
+            style={{ marginLeft: "10px" }}
+          >
+            등록
+          </button>
+        </div>
+      ) : (
+        <p style={{ color: "gray" }}>
+          리뷰 작성은 <strong>로그인 후</strong> 가능합니다.
+        </p>
+      )}
+
       <hr />
 
-      {/* 리뷰 목록 */}
-      {/* {reviews.length === 0 ? (
-        <p>등록된 리뷰가 없습니다.</p>
-      ) : ( */}
+      {/* 🔹 리뷰 목록 */}
       {reviews.map((r) => (
-          <div
-            key={r.id}
-            style={{
-              padding: "10px",
-              borderBottom: "1px solid #ddd",
-              textAlign: "left",
-            }}
-          >
-            <p>
-              <strong>{r.writer}</strong>  
-              <span style={{ color: "#888", marginLeft: "10px" }}>
-                {dayjs(r.regDate).format("YYYY-MM-DD HH:mm")}
-              </span>
-            </p>
-            <p>{r.content}</p>
-          </div>
-        ))}
+        <div
+          key={r.id}
+          style={{
+            padding: "10px",
+            borderBottom: "1px solid #ddd",
+            textAlign: "left",
+          }}
+        >
+          <p>
+            <strong>{r.writer}</strong>
+            <span style={{ color: "#888", marginLeft: "10px" }}>
+              {dayjs(r.regDate).format("YYYY-MM-DD HH:mm")}
+            </span>
+          </p>
+          <p>{r.content}</p>
+        </div>
+      ))}
 
-      <button 
+      <button
         onClick={() => navigate("/", { state: { page, keyword, type } })}
       >
         목록으로
       </button>
     </div>
   );
-}
+};
 
-export default BookDeatail;
+export default BookDetail;
