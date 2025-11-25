@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import api from "../api/api";
 import dayjs from "dayjs";
@@ -110,7 +110,14 @@ const BookDetail = () => {
         </div>
       ) : (
         <p style={{ color: "gray" }}>
-          리뷰 작성은 <strong>로그인 후</strong> 가능합니다.
+          리뷰 작성은  
+          <Link
+              to="/login"
+              style={{ marginRight: "15px", textDecoration: "none" }}
+            >
+              로그인
+            </Link>
+          후 가능합니다.
         </p>
       )}
 

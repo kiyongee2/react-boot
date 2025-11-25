@@ -104,6 +104,4 @@ public class AuthController {
         private String fullname;
         private String role;
     }
-
-
 }
