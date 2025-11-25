@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/me").authenticated()
 
                 // 도서 등록/수정/삭제는 로그인 필요
-                .requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/books/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/books/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/books/**").authenticated()
 

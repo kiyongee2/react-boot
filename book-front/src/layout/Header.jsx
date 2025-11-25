@@ -6,7 +6,7 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");  // ⬅ 토큰 변수를 의존성으로 사용
+  const token = localStorage.getItem("token");  // 토큰 변수를 의존성으로 사용
 
   // 로그인 사용자 정보 조회
   useEffect(() => {

@@ -8,11 +8,29 @@ const BookDeatail = () => {
   const [book, setBook] = useState({}); // 도서 정보 상태
   const [reviews, setReviews] = useState([]);
   const [writer, setWriter] = useState("");
+  const [user, setUser] = useState(null);
   const [content, setContent] = useState("");
 
   const navigate = useNavigate(); // 페이지 이동 훅
   const location = useLocation();
   const { page = 0, keyword = "", type = "all" } = location.state || {};
+
+  const token = localStorage.getItem("token");  // 토큰 변수를 의존성으로 사용
+
+  //로그인한 사용자 정보
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return; // 토큰 없으면 로그인 안 된 상태
+
+    api
+      .get("/auth/me")
+      .then((res) => {
+        setUser(res.data); // { username, fullname, role }
+      })
+      .catch(() => {
+        setUser(null);
+      });
+  }, [token]);
 
   // 도서 상세 정보 불러오기
   useEffect(() => {
@@ -39,7 +57,7 @@ const BookDeatail = () => {
 
   // 리뷰 등록
   const handleReviewSubmit = async () => {
-    if(!writer.trim() || !content.trim()){
+    if(!user.trim() || !content.trim()){
       alert("작성자와 내용을 입력하세요.");
       return;
     }
@@ -74,8 +92,8 @@ const BookDeatail = () => {
       <input 
         type="text" 
         placeholder="작성자"
-        value={writer}
-        onChange={(e) => setWriter(e.target.value)}
+        value={user.fullname}
+        onChange={(e) => setUser(e.target.value)}
         style={{width: "30%", marginRight: "10px", padding: "7px"}}
       />
       <input 
