@@ -2,8 +2,8 @@ import axios from "axios";
 
 const api = axios.create({
   // 백엔드 API 기본 URL(springboot 서버 주소)
-  baseURL: "http://localhost:8080/api",   //development
-  //baseURL: "http://52.78.205.73:8080/api",  //production(운영)
+  //baseURL: "http://localhost:8080/api",   //development
+  baseURL: "http://52.78.205.73:8080/api",  //production(운영)
 });
 
 api.interceptors.request.use((config) => {
