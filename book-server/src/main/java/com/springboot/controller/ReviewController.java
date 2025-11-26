@@ -16,7 +16,8 @@ import com.springboot.service.ReviewService;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://52.78.205.73:3000"})
+@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = {"http://localhost:3000", "http://52.78.205.73:3000"})
 @RequiredArgsConstructor
 @RequestMapping("/api/reviews")
 @RestController
