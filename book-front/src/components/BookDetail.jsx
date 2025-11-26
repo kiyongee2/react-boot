@@ -19,8 +19,7 @@ const BookDetail = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    api
-      .get("/auth/me")
+    api.get("/auth/me")
       .then((res) => setUser(res.data))
       .catch(() => setUser(null)); // 인증 실패 → 비로그인 처리
   }, []);

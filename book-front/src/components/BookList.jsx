@@ -4,6 +4,7 @@ import api from "../api/api";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const BookList = () => {
+  const [user, setUser] = useState(null);
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(0);      // 현재 페이지
   const [totalPages, setTotalPages] = useState(0);
@@ -11,6 +12,16 @@ const BookList = () => {
   const [keyword, setKeyword] = useState("");  // 검색어
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 로그인 사용자 정보 가져오기
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    api.get("/auth/me")
+      .then((res) => setUser(res.data))
+      .catch(() => setUser(null)); // 인증 실패 → 비로그인 처리
+  }, []);
 
   // 전달된 상태가 있으면 그 값을 사용
   useEffect(() => {
@@ -97,7 +108,10 @@ const BookList = () => {
               <th>ID</th>
               <th>제목</th>
               <th>저자</th>
+              {/* user? -> Optional Chaining user는 null인 경우도 포함 */}
+              {user?.role === "ROLE_ADMIN" && (
               <th>관리</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -113,18 +127,20 @@ const BookList = () => {
                   </Link>
                 </td>
                 <td>{book.author}</td>
-                <td>
-                  <button onClick={() => handleDelete(book.id)}>삭제</button>
-                  <button
-                    onClick={() =>
-                      navigate(`/books/${book.id}/edit`, {
-                        state: { page, keyword, type },
-                      })
-                    }
-                  >
-                    수정
-                  </button>
-                </td>
+                {user?.role === "ROLE_ADMIN" && (
+                  <td>
+                    <button onClick={() => handleDelete(book.id)}>삭제</button>
+                    <button
+                      onClick={() =>
+                        navigate(`/books/${book.id}/edit`, {
+                          state: { page, keyword, type },
+                        })
+                      }
+                    >
+                      수정
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

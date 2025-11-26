@@ -37,10 +37,10 @@ public class SecurityConfig {
                 // 로그인된 상태 인증 필요
                 .requestMatchers("/api/auth/me").authenticated()
 
-                // 도서 등록/수정/삭제는 로그인 필요
-                .requestMatchers(HttpMethod.POST, "/api/books/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/books/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/books/**").authenticated()
+                // 관리자만 도서 CRUD 허용
+                .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
 
                 //리뷰 조회는 누구나 허용
                 .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()

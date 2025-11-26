@@ -11,16 +11,11 @@ const Header = () => {
   // 로그인 사용자 정보 조회
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return; // 토큰 없으면 로그인 안 된 상태
+    if (!token) return;
 
-    api
-      .get("/auth/me")
-      .then((res) => {
-        setUser(res.data); // { username, fullname, role }
-      })
-      .catch(() => {
-        setUser(null);
-      });
+    api.get("/auth/me")
+      .then((res) => setUser(res.data))
+      .catch(() => setUser(null)); // 인증 실패 → 비로그인 처리
   }, [token]);
 
   // 로그아웃 처리
@@ -46,7 +41,6 @@ const Header = () => {
         <Link to="/" style={{ marginRight: "15px", textDecoration: "none" }}>
           📚 도서 목록
         </Link>
-
         <Link to="/add" style={{ marginRight: "15px", textDecoration: "none" }}>
           ➕ 도서 등록
         </Link>
@@ -84,115 +78,3 @@ const Header = () => {
 };
 
 export default Header;
-
-// import React, { useEffect, useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import api from "../api/api";
-
-// const Header = () => {
-//   const navigate = useNavigate();
-//   const [username, setUsername] = useState(null);
-
-//   // 로그인 사용자 정보 불러오기
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     if (!token) {
-//       setUsername(null);
-//       return;
-//     }
-
-//     const fetchUser = async () => {
-//       try {
-//         const res = await api.get("/auth/me"); // 사용자 정보 API 필요
-//         setUsername(res.data.username);
-//       } catch (err) {
-//         console.error("사용자 정보 불러오기 실패:", err);
-//         setUsername(null);
-//       }
-//     };
-
-//     fetchUser();
-//   }, []);
-
-//   // 로그아웃 기능
-//   const handleLogout = () => {
-//     localStorage.removeItem("token");
-//     alert("로그아웃되었습니다.");
-//     setUsername(null);
-//     navigate("/");
-//   };
-
-//   return (
-//     <div
-//       style={{
-//         width: "100%",
-//         padding: "15px 25px",
-//         background: "#333",
-//         color: "white",
-//         display: "flex",
-//         justifyContent: "space-between",
-//         alignItems: "center",
-//         marginBottom: "30px"
-//       }}
-//     >
-//       {/* 로고 또는 홈 링크 */}
-//       <div style={{ fontSize: "20px", fontWeight: "bold" }}>
-//         <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-//           📚 Book System
-//         </Link>
-//       </div>
-
-//       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-//         {username ? (
-//           <>
-//             <span>👤 {username} 님</span>
-//             <button
-//               onClick={handleLogout}
-//               style={{
-//                 padding: "5px 12px",
-//                 cursor: "pointer",
-//                 backgroundColor: "#ff6666",
-//                 border: "none",
-//                 color: "white",
-//                 borderRadius: "4px"
-//               }}
-//             >
-//               로그아웃
-//             </button>
-//           </>
-//         ) : (
-//           <>
-//             <button
-//               onClick={() => navigate("/login")}
-//               style={{
-//                 padding: "5px 12px",
-//                 cursor: "pointer",
-//                 backgroundColor: "#4CAF50",
-//                 border: "none",
-//                 color: "white",
-//                 borderRadius: "4px"
-//               }}
-//             >
-//               로그인
-//             </button>
-//             <button
-//               onClick={() => navigate("/register")}
-//               style={{
-//                 padding: "5px 12px",
-//                 cursor: "pointer",
-//                 backgroundColor: "#2196F3",
-//                 border: "none",
-//                 color: "white",
-//                 borderRadius: "4px"
-//               }}
-//             >
-//               회원가입
-//             </button>
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Header;

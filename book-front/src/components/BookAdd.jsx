@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api/api.js";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +6,20 @@ const BookAdd = () => {
   const [title, setTitle] = useState(""); // 도서명 상태
   const [author, setAuthor] = useState(""); // 저자명 상태
   const navigate = useNavigate();  // 페이지 이동 훅
+
+  useEffect(() => {
+    api.get("/auth/me")
+      .then(res => {
+        if (res.data.role !== "ROLE_ADMIN") {
+          alert("관리자만 접근 가능합니다.");
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+      });
+  }, []);
 
   // 도서 등록 처리
   const handleSubmit = async () => {
